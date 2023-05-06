@@ -5,6 +5,9 @@ import java.time.LocalDate;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import lombok.Data;
+
+@Data
 @Document(value="Turno")
 public class Turno {
 	
@@ -18,9 +21,6 @@ public class Turno {
 	private String estado;
 	private LocalDate fecha;
 	
-	public Turno() {
-	}
-	
 	public Turno(String nombreDePerro, String rangoHorario, String dNI, String motivo, String estado, LocalDate fecha) {
 		super();
 		this.nombreDePerro = nombreDePerro;
@@ -31,40 +31,4 @@ public class Turno {
 		this.fecha = fecha;
 	}
 
-	public String getNombreDePerro() {
-		return nombreDePerro;
-	}
-	public void setNombreDePerro(String nombreDePerro) {
-		this.nombreDePerro = nombreDePerro;
-	}
-	public String getRangoHorario() {
-		return rangoHorario;
-	}
-	public void setRangoHorario(String rangoHorario) {
-		this.rangoHorario = rangoHorario;
-	}
-	public String getDNI() {
-		return DNI;
-	}
-	public void setDNI(String dNI) {
-		DNI = dNI;
-	}
-	public String getMotivo() {
-		return motivo;
-	}
-	public void setMotivo(String motivo) {
-		this.motivo = motivo;
-	}
-	public String getEstado() {
-		return estado;
-	}
-	public void setEstado(String estado) {
-		this.estado = estado;
-	}
-	public LocalDate getFecha() {
-		return fecha;
-	}
-	public void setFecha(LocalDate fecha) {
-		this.fecha = fecha;
-	}
 }

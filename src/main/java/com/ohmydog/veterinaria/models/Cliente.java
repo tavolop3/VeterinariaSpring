@@ -3,11 +3,16 @@ package com.ohmydog.veterinaria.models;
 import java.util.List;
 
 import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import lombok.Data;
+
+@Data
 @Document(value = "Cliente")
 public class Cliente extends Usuario{
 	
+	@Indexed(unique = true)
 	private String DNI;	
 	private String telefono;
 	private List<Long> perrosId;
@@ -17,8 +22,9 @@ public class Cliente extends Usuario{
 	private double montoDescuento;
 	
 	public Cliente() {
+		this.montoDescuento = 0;
 	}
-
+	
 	public Cliente(String nombre, String apellido, String mail, String contraseña, String dNI, String telefono) {
 		super(nombre, apellido, mail, contraseña);
 		DNI = dNI;
@@ -36,63 +42,7 @@ public class Cliente extends Usuario{
 		this.adopcionesId = adopcionesId;
 		this.cruzasId = cruzasId;
 		this.montoDescuento = 0;
-	}
-
-	public String getDNI() {
-		return DNI;
-	}
-
-	public void setDNI(String dNI) {
-		DNI = dNI;
-	}
-
-	public String getTelefono() {
-		return telefono;
-	}
-
-	public void setTelefono(String telefono) {
-		this.telefono = telefono;
-	}
-
-	public List<Long> getPerrosId() {
-		return perrosId;
-	}
-
-	public void setPerrosId(List<Long> perrosId) {
-		this.perrosId = perrosId;
-	}
-
-	public List<Long> getTurnosId() {
-		return turnosId;
-	}
-
-	public void setTurnosId(List<Long> turnosId) {
-		this.turnosId = turnosId;
-	}
-
-	public List<Long> getAdopcionesId() {
-		return adopcionesId;
-	}
-
-	public void setAdopcionesId(List<Long> adopcionesId) {
-		this.adopcionesId = adopcionesId;
-	}
-
-	public List<Long> getCruzasId() {
-		return cruzasId;
-	}
-
-	public void setCruzasId(List<Long> cruzasId) {
-		this.cruzasId = cruzasId;
-	}
-
-	public double getMontoDescuento() {
-		return montoDescuento;
-	}
-
-	public void setMontoDescuento(double montoDescuento) {
-		this.montoDescuento = montoDescuento;
-	}                                       
+	}                                  
 	
 }                                           
                                             
