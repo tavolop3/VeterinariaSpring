@@ -1,8 +1,12 @@
 package com.ohmydog.veterinaria.models;
 
 import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import lombok.Data;
+
+@Data
 @Document(value="PaseadorCuidador")
 public class PaseadorCuidador {
 
@@ -14,9 +18,8 @@ public class PaseadorCuidador {
 	private String tipoServicio;
 	private String zona;
 	private String disponibilidadHoraria;
-	
-	public PaseadorCuidador() {
-	}
+	@Indexed(unique = true)
+	private String mail;
 	
 	public PaseadorCuidador(String nombre, String apellido, String tipoServicio, String zona,
 			String disponibilidadHoraria) {
@@ -28,34 +31,4 @@ public class PaseadorCuidador {
 		this.disponibilidadHoraria = disponibilidadHoraria;
 	}
 
-	public String getNombre() {
-		return nombre;
-	}
-	public void setNombre(String nombre) {
-		this.nombre = nombre;
-	}
-	public String getApellido() {
-		return apellido;
-	}
-	public void setApellido(String apellido) {
-		this.apellido = apellido;
-	}
-	public String getTipoServicio() {
-		return tipoServicio;
-	}
-	public void setTipoServicio(String tipoServicio) {
-		this.tipoServicio = tipoServicio;
-	}
-	public String getZona() {
-		return zona;
-	}
-	public void setZona(String zona) {
-		this.zona = zona;
-	}
-	public String getDisponibilidadHoraria() {
-		return disponibilidadHoraria;
-	}
-	public void setDisponibilidadHoraria(String disponibilidadHoraria) {
-		this.disponibilidadHoraria = disponibilidadHoraria;
-	}
 }
