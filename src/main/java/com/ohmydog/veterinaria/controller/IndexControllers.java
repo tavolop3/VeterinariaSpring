@@ -8,14 +8,18 @@ import org.springframework.web.bind.annotation.RestController;
 public class IndexControllers {
 
 	@GetMapping
-	public String index() {
-//		return "Index de usuario...";
+	public String getIndex() {
 		return "index";
 	}
 	
 	@GetMapping(value="/admindex")
 	public String getAdminPage() {
 		return "Menú de admin...";
+	}
+	
+	@GetMapping("/login")
+	public String getLogin() {
+		return "login";
 	}
 	
 }

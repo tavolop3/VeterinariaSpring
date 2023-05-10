@@ -51,6 +51,14 @@ public class Usuario{
 		this.cruzasId = cruzasId;
 		this.montoDescuento = montoDescuento;
 	}
+
+	@Override
+	public String toString() {
+		return "Usuario [mail=" + mail + ", nombre=" + nombre + ", apellido=" + apellido + ", contraseña=" + contraseña
+				+ ", DNI=" + DNI + ", telefono=" + telefono + "]";
+	}
+	
+	
 	
 }                                           
                                             

@@ -29,7 +29,6 @@ public class UsuarioController {
 	@PostMapping(value = "/login")
 	public ResponseEntity<?> logearUsuario(@RequestBody Usuario usuario) {
 		try {
-			ResponseEntity<String> invalido = new ResponseEntity<String>("El mail/contraseña es invalido.",HttpStatus.BAD_REQUEST);	
 			Usuario usuarioEncontrado = usuarioRepo.findById(usuario.getMail()).orElse(null);
 
 			boolean existe = usuarioEncontrado != null;
@@ -40,11 +39,12 @@ public class UsuarioController {
 					if(usuarioEncontrado.isEsAdmin()) {
 						redirect.setUrl("/admindex");
 					}else
-						redirect.setUrl("/index");
+						redirect.setUrl("");
+					//autenticar usuario
 					return new ResponseEntity<RedirectView>(redirect,HttpStatus.ACCEPTED);
 				}
 			}
-			return invalido;
+			return new ResponseEntity<String>("El mail/contraseña es invalido.",HttpStatus.BAD_REQUEST);
 		}catch (Exception e){
 			return new ResponseEntity<String>(e.getCause().toString(),
 												HttpStatus.INTERNAL_SERVER_ERROR);
@@ -58,6 +58,7 @@ public class UsuarioController {
 					return new ResponseEntity<String>("El usuario ya existe.",HttpStatus.BAD_REQUEST);
 				
 				Usuario usuarioGuardado = usuarioRepo.save(usuario);
+
 				return new ResponseEntity<Usuario>(usuarioGuardado,HttpStatus.CREATED);
 		}catch (Exception e){
 			return new ResponseEntity<String>(e.getCause().toString(),
