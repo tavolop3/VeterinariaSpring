@@ -7,8 +7,13 @@ import org.springframework.web.bind.annotation.RestController;
 public class ApiControllers {
 
 	@GetMapping(value="/index")
-	public String getPage() {
-		return "OH MY DOG...";
+	public String getIndexPage() {
+		return "Index de usuario...";
+	}
+	
+	@GetMapping(value="/admindex")
+	public String getAdminPage() {
+		return "Index de admin...";
 	}
 	
 }
