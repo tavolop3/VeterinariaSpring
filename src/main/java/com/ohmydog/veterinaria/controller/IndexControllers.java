@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.RestController;
 @Controller
 public class IndexControllers {
 
-	@GetMapping(value="/")
+	@GetMapping
 	public String index() {
 //		return "Index de usuario...";
 		return "index";
