@@ -65,4 +65,37 @@ public class UsuarioController {
 		}
 	}
 	
+	/* El metodo permite a un usuario determinado 
+	 * modificar su mail y contraseña
+	 */
+	@PostMapping(value = "/modificar")
+	public ResponseEntity<?> modificarMisDatos (@RequestBody Usuario datosViejos, Usuario datosNuevos, String contraseña) {
+		try {
+			Usuario aModificar = usuarioRepo.findById(datosViejos.getMail()).orElse(null);
+			if (aModificar != null) {
+				if (contraseña == datosViejos.getContraseña()) {
+					if (datosNuevos.getMail() != "") {
+						aModificar.setMail(datosNuevos.getMail());
+					}
+					if (datosNuevos.getContraseña() != "") {
+						aModificar.setContraseña(datosNuevos.getMail());
+					}
+					usuarioRepo.save(aModificar);
+					RedirectView redirect = new RedirectView();
+					redirect.setUrl("/");
+					return new ResponseEntity<RedirectView>(redirect, HttpStatus.ACCEPTED);
+				}
+				else {
+					return new ResponseEntity<String>("La contraseña no coincide:", HttpStatus.SEE_OTHER);
+				}
+			}
+			else {
+				return new ResponseEntity<String>("No se encontro el usuario a modificar", HttpStatus.SEE_OTHER);
+			}
+		} catch (Exception e) {
+			// informa que hubo problemas con la base de datos
+			return new ResponseEntity<String>(e.getCause().toString(), HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+	}
+	
 }

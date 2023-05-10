@@ -18,4 +18,8 @@ public class IndexControllers {
 		return "Menú de admin...";
 	}
 	
+	@GetMapping(value="modificar")
+	public String getModificarMisDatosPage() {
+		return "modificar";
+	}
 }
