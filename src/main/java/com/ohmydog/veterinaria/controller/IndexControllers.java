@@ -22,4 +22,8 @@ public class IndexControllers {
 		return "login";
 	}
 	
+	@GetMapping(value="/modificar")
+	public String getModificarMisDatosPage() {
+		return "modificar";
+	}
 }
