@@ -1,19 +1,21 @@
 package com.ohmydog.veterinaria.controller;
 
+import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-@RestController
-public class ApiControllers {
+@Controller
+public class IndexControllers {
 
-	@GetMapping(value="/index")
-	public String getIndexPage() {
-		return "Index de usuario...";
+	@GetMapping(value="/")
+	public String index() {
+//		return "Index de usuario...";
+		return "index";
 	}
 	
 	@GetMapping(value="/admindex")
 	public String getAdminPage() {
-		return "Index de admin...";
+		return "Menú de admin...";
 	}
 	
 }
