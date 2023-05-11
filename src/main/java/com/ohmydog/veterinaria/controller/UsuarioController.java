@@ -1,14 +1,18 @@
 package com.ohmydog.veterinaria.controller;
 
+import java.net.URI;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.view.RedirectView;
 
 import com.ohmydog.veterinaria.models.Usuario;
@@ -27,7 +31,7 @@ public class UsuarioController {
 	}
 	
 	@PostMapping(value = "/login")
-	public ResponseEntity<?> logearUsuario(@RequestBody Usuario usuario) {
+	public ResponseEntity<?> logearUsuario(@ModelAttribute Usuario usuario) {
 		try {
 			Usuario usuarioEncontrado = usuarioRepo.findById(usuario.getMail()).orElse(null);
 
@@ -35,13 +39,17 @@ public class UsuarioController {
 			if(existe){
 				boolean contraseñasIguales = usuarioEncontrado.getContraseña().equals(usuario.getContraseña());
 				if(contraseñasIguales) {
-					RedirectView redirect = new RedirectView();
+					URI uri;
+				    HttpHeaders headers = new HttpHeaders();
+				    
 					if(usuarioEncontrado.isEsAdmin()) {
-						redirect.setUrl("/admindex");
+						uri = URI.create("/admindex");
 					}else
-						redirect.setUrl("");
+						uri = URI.create("/");
 					//autenticar usuario
-					return new ResponseEntity<RedirectView>(redirect,HttpStatus.ACCEPTED);
+					headers.setLocation(uri);
+					return new ResponseEntity<>(headers, HttpStatus.FOUND);
+
 				}
 			}
 			return new ResponseEntity<String>("El mail/contraseña es invalido.",HttpStatus.BAD_REQUEST);

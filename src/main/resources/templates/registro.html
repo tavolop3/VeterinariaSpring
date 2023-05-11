@@ -2,9 +2,42 @@
 <html>
 	<head>
 		<meta charset="UTF-8">
-		<title>Registrar usuario</title>
+		<title> Registrar usuario </title>
+		<link rel="stylesheet" href="/style/registro.css">
 	</head>
-	<body>
-		<h1>Formulario de registro:</h1>
-	</body>
+	<form action="/usuario/registro" method="post">
+	 <ul>
+	  <li>
+	    <label for="nombre"> Nombre </label>
+	    <input type="text" id="nombre" name="nombre">
+	  </li>
+  	  <li>
+	    <label for="apellido"> Apellido </label>
+	    <input type="text" id="apellido" name="apellido">
+	  </li>
+	  <li>
+	    <label for="mail"> Mail </label>
+	    <input type="email" id="mail" name="mail">
+	  </li>
+	  <li>
+	    <label for="contraseña"> Contraseña </label>
+	    <input type="password" id="password" name="contraseña">
+	  </li>
+  	  <li>
+	    <label for="contraseña"> Repetir contraseña </label>
+	    <input type="password" id="repetir_password" name="contraseña_repetida">
+	  </li>
+  	  <li>
+	    <label for="telefono"> Telefono </label>
+	    <input type="text" id="telefono" name="telefono">
+	  </li>
+  	  <li>
+	    <label for="DNI">DNI </label>
+	    <input type="text" id="DNI" name="dni">
+	  </li>
+  	 	<li class="button">
+  			<button type="submit"> Registrar </button>
+		</li>
+	 </ul>
+	</form>
 </html>
