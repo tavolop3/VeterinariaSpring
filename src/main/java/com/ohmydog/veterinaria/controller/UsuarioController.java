@@ -19,7 +19,7 @@ import com.ohmydog.veterinaria.models.Usuario;
 import com.ohmydog.veterinaria.repo.UsuarioRepo;
 
 @RestController
-@RequestMapping("/usuario")
+@RequestMapping("/usuarios")
 public class UsuarioController {
 	
 	@Autowired
@@ -39,6 +39,9 @@ public class UsuarioController {
 			if(existe){
 				boolean contraseñasIguales = usuarioEncontrado.getContraseña().equals(usuario.getContraseña());
 				if(contraseñasIguales) {
+					usuarioEncontrado.setLogeado(true);
+					usuarioRepo.save(usuarioEncontrado);
+					
 					URI uri;
 				    HttpHeaders headers = new HttpHeaders();
 				    
@@ -46,7 +49,7 @@ public class UsuarioController {
 						uri = URI.create("/admindex");
 					}else
 						uri = URI.create("/");
-					//autenticar usuario
+					
 					headers.setLocation(uri);
 					return new ResponseEntity<>(headers, HttpStatus.FOUND);
 

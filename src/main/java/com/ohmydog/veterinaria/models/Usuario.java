@@ -19,6 +19,7 @@ public class Usuario{
 	private String apellido;
 	private String contraseña;
 	private boolean esAdmin;
+	private boolean logeado;
 	
 	@Indexed(unique = true)
 	private String DNI;
