@@ -2,6 +2,7 @@ package com.ohmydog.veterinaria.models;
 
 import java.util.List;
 
+import org.bson.types.ObjectId;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
@@ -22,10 +23,10 @@ public class Usuario{
 	private boolean logeado;
 	
 	@Indexed(unique = true)
-	private String DNI;
+	private String dni;
 
 	private String telefono;
-	private List<Long> perrosId;
+	private List<ObjectId> perrosId;
 	private List<Long> turnosId;
 	private List<Long> adopcionesId;
 	private List<Long> cruzasId;
@@ -35,8 +36,8 @@ public class Usuario{
 		this.montoDescuento = 0;
 	}
 
-	public Usuario(String mail, String nombre, String apellido, String contraseña, boolean esAdmin, String dNI,
-			String telefono, List<Long> perrosId, List<Long> turnosId, List<Long> adopcionesId, List<Long> cruzasId,
+	public Usuario(String mail, String nombre, String apellido, String contraseña, boolean esAdmin, String dni,
+			String telefono, List<ObjectId> perrosId, List<Long> turnosId, List<Long> adopcionesId, List<Long> cruzasId,
 			double montoDescuento) {
 		super();
 		this.mail = mail;
@@ -44,7 +45,7 @@ public class Usuario{
 		this.apellido = apellido;
 		this.contraseña = contraseña;
 		this.esAdmin = esAdmin;
-		DNI = dNI;
+		this.dni = dni;
 		this.telefono = telefono;
 		this.perrosId = perrosId;
 		this.turnosId = turnosId;
@@ -55,11 +56,10 @@ public class Usuario{
 
 	@Override
 	public String toString() {
-		return "Usuario [mail=" + mail + ", nombre=" + nombre + ", apellido=" + apellido + ", contraseña=" + contraseña
-				+ ", DNI=" + DNI + ", telefono=" + telefono + "]";
+		return "Usuario [mail=" + mail + ", nombre=" + nombre + ", apellido=" + apellido + ", DNI=" + dni 
+				+ ", telefono=" + telefono + "]";
 	}
 	
-	
-	
+
 }                                           
                                             

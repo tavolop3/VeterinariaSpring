@@ -1,42 +1,53 @@
 package com.ohmydog.veterinaria.controller;
 
 import java.net.URI;
+import java.util.ArrayList;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.view.RedirectView;
 
+import com.ohmydog.veterinaria.models.Perro;
 import com.ohmydog.veterinaria.models.Usuario;
+import com.ohmydog.veterinaria.repo.PerroRepo;
 import com.ohmydog.veterinaria.repo.UsuarioRepo;
 
-@RestController
+@Controller
 @RequestMapping("/usuarios")
 public class UsuarioController {
 	
 	@Autowired
 	private UsuarioRepo usuarioRepo;
 	
+	@Autowired
+	private PerroRepo perroRepo;
+	
 	@GetMapping
-	public List<Usuario> getUsuarios() {
-		return usuarioRepo.findAll();
+	public String getUsuarios(Model model) {
+		List<Usuario> usuarios = usuarioRepo.findAll();
+		model.addAttribute("usuarios", usuarios);
+		return "listaUsuarios";
 	}
 	
 	@PostMapping(value = "/login")
 	public ResponseEntity<?> logearUsuario(@ModelAttribute Usuario usuario) {
+		this.inicializarLogueados();
 		try {
 			Usuario usuarioEncontrado = usuarioRepo.findById(usuario.getMail()).orElse(null);
 
 			boolean existe = usuarioEncontrado != null;
 			if(existe){
+				// TODO desencriptar las 2 pass y compararlas
 				boolean contraseñasIguales = usuarioEncontrado.getContraseña().equals(usuario.getContraseña());
 				if(contraseñasIguales) {
 					usuarioEncontrado.setLogeado(true);
@@ -44,33 +55,26 @@ public class UsuarioController {
 					
 					URI uri;
 				    HttpHeaders headers = new HttpHeaders();
+				    String redirectPath;
 				    
 					if(usuarioEncontrado.isEsAdmin()) {
-						uri = URI.create("/admindex");
+						redirectPath = "/admin";
 					}else
-						uri = URI.create("/");
+						redirectPath = "/cliente";
 					
-					headers.setLocation(uri);
+					//si el usuario tiene la pass generica pide que la cambies
+					if(usuarioEncontrado.getContraseña().equals("1234")) {
+						//habria que mostrarle el mensaje de cambiar la pass en mod html
+						redirectPath = "/usuarios/modificar?primerIngreso";
+					}
+					
+					uri = URI.create(redirectPath);
+					headers.setLocation(uri);					
 					return new ResponseEntity<>(headers, HttpStatus.FOUND);
 
 				}
 			}
 			return new ResponseEntity<String>("El mail/contraseña es invalido.",HttpStatus.BAD_REQUEST);
-		}catch (Exception e){
-			return new ResponseEntity<String>(e.getCause().toString(),
-												HttpStatus.INTERNAL_SERVER_ERROR);
-		}
-	}
-	
-	@PostMapping(value = "/registrarse")
-	public ResponseEntity<?> registrarUsuario(@RequestBody Usuario usuario) {
-		try {
-				if(usuarioRepo.existsById(usuario.getMail()))
-					return new ResponseEntity<String>("El usuario ya existe.",HttpStatus.BAD_REQUEST);
-				
-				Usuario usuarioGuardado = usuarioRepo.save(usuario);
-
-				return new ResponseEntity<Usuario>(usuarioGuardado,HttpStatus.CREATED);
 		}catch (Exception e){
 			return new ResponseEntity<String>(e.getCause().toString(),
 												HttpStatus.INTERNAL_SERVER_ERROR);
@@ -110,4 +114,41 @@ public class UsuarioController {
 		}
 	}
 	
+	@GetMapping(value="/quiensoy")
+	public ResponseEntity<Usuario> quienSoy() {
+		return new ResponseEntity<Usuario>(usuarioLogueado(), HttpStatus.ACCEPTED)  ;
+	}
+	
+	public Usuario usuarioLogueado() {
+		return usuarioRepo.findByLogeado(true);
+	}
+		
+	//para cada vez que el usuario inicia sesion eliminar inicios previos que 
+	//no cerraron sesion
+	public void inicializarLogueados() {
+		List<Usuario> usuarios = usuarioRepo.findAll();
+		usuarios.forEach(u -> u.setLogeado(false));
+		usuarioRepo.saveAll(usuarios);
+	}
+	
+	//para listar los perros del usuario en el listar perros como admin
+	public List<Perro> listarPerros(Usuario usuario) {
+		if(usuario.getPerrosId() == null)
+			return new ArrayList<Perro>();
+			
+		return usuario.getPerrosId().stream()
+					.map(p -> perroRepo.findById(p).orElse(null)).toList();
+		
+	}
+	
+	public List<Perro> listarMisPerros(){
+		return listarPerros(usuarioLogueado());
+	}
+	
+	@GetMapping(value="/perros")
+	public String getPerros(Model model) {
+		List<Perro> perros = listarMisPerros();
+		model.addAttribute("perros", perros);
+		return "listaPerros";
+	}
 }

@@ -11,9 +11,9 @@ public class IndexControllers {
 		return "index";
 	}
 	
-	@GetMapping(value="/admindex")
+	@GetMapping(value="/admin")
 	public String getAdminPage() {
-		return "Menú de admin...";
+		return "indexAdmin";
 	}
 	
 	@GetMapping("/login")
@@ -24,5 +24,10 @@ public class IndexControllers {
 	@GetMapping(value="/modificar")
 	public String getModificarMisDatosPage() {
 		return "modificar";
+	}
+	
+	@GetMapping(value="/cliente")
+	public String getClienteHome() {
+		return "indexCliente";
 	}
 }
