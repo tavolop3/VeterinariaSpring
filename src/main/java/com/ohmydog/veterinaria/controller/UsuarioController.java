@@ -11,8 +11,8 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.view.RedirectView;
 
 import com.ohmydog.veterinaria.models.Usuario;
@@ -81,16 +81,18 @@ public class UsuarioController {
 	 * modificar su mail y contraseña
 	 */
 	@PostMapping(value = "/modificar")
-	public ResponseEntity<?> modificarMisDatos (@RequestBody Usuario datosViejos, Usuario datosNuevos, String contraseña) {
+	public ResponseEntity<?> modificarMisDatos (@RequestParam("mail1") String mail1, 
+			@RequestParam("mail2") String mail2, @RequestParam("contraseña1") String contraseña1,
+			@RequestParam("contraseña2") String contraseña2) {
 		try {
-			Usuario aModificar = usuarioRepo.findById(datosViejos.getMail()).orElse(null);
+			Usuario aModificar = usuarioRepo.findById(mail1).orElse(null);
 			if (aModificar != null) {
-				if (contraseña == datosViejos.getContraseña()) {
-					if (datosNuevos.getMail() != "") {
-						aModificar.setMail(datosNuevos.getMail());
+				if (contraseña1 == aModificar.getContraseña()) {
+					if (mail2 != "") {
+						aModificar.setMail(mail2);
 					}
-					if (datosNuevos.getContraseña() != "") {
-						aModificar.setContraseña(datosNuevos.getMail());
+					if (contraseña2 != "") {
+						aModificar.setContraseña(contraseña2);
 					}
 					usuarioRepo.save(aModificar);
 					RedirectView redirect = new RedirectView();
