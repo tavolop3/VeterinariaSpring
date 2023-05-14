@@ -112,4 +112,34 @@ public class UsuarioController {
 		}
 	}
 	
+	/* El metodo permite
+	 * al administrador modificar los datos
+	 * de un usuario
+	 */
+	@PostMapping(value = "/modificar/usuario")
+	public ResponseEntity<?> modificarUsuario (@RequestParam("mailDelUsuario") String mailDelUsuario,
+			@RequestParam("mail") String mail,
+			@RequestParam("nombre") String nombre,
+			@RequestParam("apellido") String apellido,
+			@RequestParam("dni") String dni,
+			@RequestParam("telefono") String telefono) {
+		try {
+			Usuario aModificar = usuarioRepo.findById(mailDelUsuario).orElse(null);
+			if (aModificar != null) {
+				aModificar.setMail(mail);
+				aModificar.setNombre(nombre);
+				aModificar.setApellido(apellido);
+				aModificar.setDNI(dni);
+				aModificar.setTelefono(telefono);
+				// deberia retornar a la pagina donde lista los usuarios
+				return new ResponseEntity<String>("/", HttpStatus.ACCEPTED);
+			}
+			else {
+				return new ResponseEntity<String>("No se encontro el usuario a modificar", HttpStatus.SEE_OTHER);
+			}
+		} catch (Exception e) {
+			return new ResponseEntity<String>(e.getCause().toString(), HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+	}
+	
 }
