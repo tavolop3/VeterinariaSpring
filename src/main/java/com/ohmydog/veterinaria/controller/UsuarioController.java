@@ -44,7 +44,6 @@ public class UsuarioController {
 					
 					URI uri;
 				    HttpHeaders headers = new HttpHeaders();
-				    
 					if(usuarioEncontrado.isEsAdmin()) {
 						uri = URI.create("/admindex");
 					}else
